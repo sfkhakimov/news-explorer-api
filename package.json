@@ -1,0 +1,24 @@
+{
+  "name": "news-explorer-api",
+  "version": "0.0.0",
+  "description": "",
+  "main": "index.js",
+  "scripts": {
+    "dev": "nodemon --inspect app.js",
+    "start": "node app.js",
+    "lint": "npx eslint --ext .js ."
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/SFKhakimov/news-explorer-api.git"
+  },
+  "author": "Shakir",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/SFKhakimov/news-explorer-api/issues"
+  },
+  "homepage": "https://github.com/SFKhakimov/news-explorer-api#readme",
+  "devDependencies": {
+    "nodemon": "^2.0.3"
+  }
+}
