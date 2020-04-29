@@ -1,7 +1,8 @@
 const router = require('express').Router();
+const { createArticle, getArticle, deleteArticle } = require('../controllers/articles');
 
-router.get('/');
-router.post('/');
-router.delete('/:articleId');
+router.get('/', getArticle);
+router.post('/', createArticle);
+router.delete('/:articleId', deleteArticle);
 
 module.exports = router;
