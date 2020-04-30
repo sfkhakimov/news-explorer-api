@@ -1,3 +1,4 @@
+require('dotenv').config();
 const express = require('express');
 const mongoose = require('mongoose');
 const bodyParser = require('body-parser');
@@ -5,12 +6,12 @@ const cookieParser = require('cookie-parser');
 const validator = require('validator');
 const { celebrate, Joi } = require('celebrate');
 const { errors } = require('celebrate');
-const users = require('./routes/users');
-const articles = require('./routes/articles');
+const router = require('./routes/index');
 const { createUser, login, logout } = require('./controllers/users');
 const middleware = require('./middlewares/middleware');
 const auth = require('./middlewares/auth');
 const { requestLogger, errorLogger } = require('./middlewares/logger');
+const centralizedErrorHandler = require('./middlewares/centralizedErrorHandler');
 
 const { PORT = 3000 } = process.env;
 const app = express();
@@ -54,20 +55,13 @@ app.post('/signin', celebrate({
 
 app.use(auth);
 app.put('/logout', logout);
-app.use('/users', users);
-app.use('/articles', articles);
+app.use('/', router);
 
 app.use(middleware);
 app.use(errorLogger);
 
 app.use(errors());
-app.use((err, req, res, next) => {
-  const { statusCode = 500, message } = err;
-  res.status(statusCode)
-    .send({
-      message: statusCode === 500 ? 'На сервере произошла ошиюка' : message,
-    });
-});
+app.use(centralizedErrorHandler);
 
 app.listen(PORT, () => {
   console.log('server running on port 3000');
