@@ -7,7 +7,7 @@ const { celebrate, Joi } = require('celebrate');
 const { errors } = require('celebrate');
 const users = require('./routes/users');
 const articles = require('./routes/articles');
-const { createUser, login } = require('./controllers/users');
+const { createUser, login, logout } = require('./controllers/users');
 const middleware = require('./middlewares/middleware');
 const auth = require('./middlewares/auth');
 const { requestLogger, errorLogger } = require('./middlewares/logger');
@@ -53,6 +53,7 @@ app.post('/signin', celebrate({
 }), login);
 
 app.use(auth);
+app.put('/logout', logout);
 app.use('/users', users);
 app.use('/articles', articles);
 

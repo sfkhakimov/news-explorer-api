@@ -47,8 +47,17 @@ const getUser = (req, res, next) => {
     .catch(next);
 };
 
+const logout = (req, res, next) => {
+  const token = req.cookies.jwt;
+  if (token) {
+    return res.clearCookie('jwt', token).send({ message: 'Выход успешно произведён' });
+  }
+  return next();
+};
+
 module.exports = {
   createUser,
   login,
   getUser,
+  logout,
 };
