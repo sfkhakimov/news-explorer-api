@@ -11,7 +11,6 @@ const createArticle = (req, res, next) => {
     source,
     link,
     image,
-    owner = req.user._id,
   } = req.body;
   Article.create({
     keyword,
@@ -21,7 +20,7 @@ const createArticle = (req, res, next) => {
     source,
     link,
     image,
-    owner,
+    owner: req.user._id,
   })
     .then((article) => res.status(201).send({
       keyword: article.keyword,
@@ -48,16 +47,8 @@ const deleteArticle = (req, res, next) => {
       if (!article.owner.equals(req.user._id)) {
         throw new Forbidden('Вы не можете удалять чужие карточки');
       }
-      return Article.findByIdAndDelete(req.params.articleId)
-        .then((item) => res.send({
-          keyword: item.keyword,
-          title: item.title,
-          text: item.text,
-          date: item.date,
-          source: item.source,
-          link: item.link,
-          image: item.image,
-        }));
+      return Article.findByIdAndDelete(req.params.articleId).select('-owner')
+        .then((item) => res.send({ item }));
     })
     .catch(next);
 };

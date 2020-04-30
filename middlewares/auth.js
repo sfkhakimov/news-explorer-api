@@ -7,7 +7,7 @@ module.exports = (req, res, next) => {
   const unauthorized = new Unauthorized('Необходима авторизация');
 
   if (!authorization) {
-    return res.status(unauthorized.statusCode).send(unauthorized.message);
+    return res.status(unauthorized.statusCode).send({ message: unauthorized.message });
   }
 
   let payload;
@@ -15,9 +15,9 @@ module.exports = (req, res, next) => {
   try {
     payload = jwt.verify(authorization, NODE_ENV === 'production' ? JWT_SECRET : 'develop');
   } catch (err) {
-    return res.status(unauthorized.statusCode).send(unauthorized.message);
+    return res.status(unauthorized.statusCode).send({ message: unauthorized.message });
   }
   req.user = payload;
 
-  next();
+  return next();
 };
