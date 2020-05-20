@@ -4,6 +4,7 @@ const mongoose = require('mongoose');
 const bodyParser = require('body-parser');
 const cookieParser = require('cookie-parser');
 const validator = require('validator');
+const cors = require('cors');
 const { celebrate, Joi } = require('celebrate');
 const { errors } = require('celebrate');
 const router = require('./routes/index');
@@ -14,10 +15,12 @@ const { requestLogger, errorLogger } = require('./middlewares/logger');
 const centralizedErrorHandler = require('./middlewares/centralizedErrorHandler');
 
 const { PORT = 3000 } = process.env;
+const whitelist = ['http://localhost:8080', 'http://planet-news.ml', 'https://planet-news.ml'];
+const corsOptions = {
+  credentials: true,
+  origin: whitelist,
+};
 const app = express();
-
-app.use(bodyParser.json());
-app.use(cookieParser());
 
 mongoose.connect('mongodb://localhost:27017/news-explorer', {
   useNewUrlParser: true,
@@ -26,7 +29,14 @@ mongoose.connect('mongodb://localhost:27017/news-explorer', {
   useUnifiedTopology: true,
 });
 
+app.use(bodyParser.json());
+app.use(cookieParser());
 app.use(requestLogger);
+
+app.options('*', cors(corsOptions), (req, res) => {
+  res.status(200).send('OK');
+});
+app.use(cors(corsOptions));
 
 app.post('/signup', celebrate({
   body: Joi.object().keys({
