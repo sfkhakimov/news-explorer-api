@@ -71,7 +71,7 @@ const getArticleNewsApi = (req, res, next) => {
     sortBy: sort,
     pageSize: resultSize,
   })
-    .then((response) => res.send({ response }))
+    .then((articles) => res.send(articles))
     .catch(next);
 };
 
