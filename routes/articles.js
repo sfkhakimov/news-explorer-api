@@ -5,7 +5,6 @@ const {
   createArticle,
   getArticle,
   deleteArticle,
-  getArticleNewsApi,
 } = require('../controllers/articles');
 
 router.get('/', getArticle);
@@ -37,7 +36,5 @@ router.delete('/:articleId', celebrate({
     articleId: Joi.string().alphanum().length(24).required(),
   }),
 }), deleteArticle);
-
-router.get('/news-api', getArticleNewsApi);
 
 module.exports = router;

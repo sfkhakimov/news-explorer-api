@@ -9,6 +9,7 @@ const { celebrate, Joi } = require('celebrate');
 const { errors } = require('celebrate');
 const router = require('./routes/index');
 const { createUser, login, logout } = require('./controllers/users');
+const { getArticleNewsApi } = require('./controllers/articles');
 const middleware = require('./middlewares/middleware');
 const auth = require('./middlewares/auth');
 const { requestLogger, errorLogger } = require('./middlewares/logger');
@@ -37,6 +38,8 @@ app.options('*', cors(corsOptions), (req, res) => {
   res.status(200).send('OK');
 });
 app.use(cors(corsOptions));
+
+app.get('/news-api', getArticleNewsApi);
 
 app.post('/signup', celebrate({
   body: Joi.object().keys({
