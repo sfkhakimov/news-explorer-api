@@ -1,6 +1,9 @@
+const NewsAPI = require('newsapi');
 const Article = require('../models/article');
 const NotFound = require('../errors/notFound');
 const Forbidden = require('../errors/forbidden');
+
+const newsapi = new NewsAPI('1a27ff3603c6422681720b80c8a7cb70');
 
 const createArticle = (req, res, next) => {
   const {
@@ -53,8 +56,28 @@ const deleteArticle = (req, res, next) => {
     .catch(next);
 };
 
+const getArticleNewsApi = (req, res, next) => {
+  const {
+    keyword,
+    fromDate,
+    toDate,
+    sort,
+    resultSize,
+  } = req.query;
+  newsapi.v2.everything({
+    q: keyword,
+    from: fromDate,
+    to: toDate,
+    sortBy: sort,
+    pageSize: resultSize,
+  })
+    .then((articles) => res.send(articles))
+    .catch(next);
+};
+
 module.exports = {
   createArticle,
   getArticle,
   deleteArticle,
+  getArticleNewsApi,
 };

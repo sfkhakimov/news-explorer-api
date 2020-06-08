@@ -1,9 +1,14 @@
 const router = require('express').Router();
 const validator = require('validator');
 const { celebrate, Joi } = require('celebrate');
-const { createArticle, getArticle, deleteArticle } = require('../controllers/articles');
+const {
+  createArticle,
+  getArticle,
+  deleteArticle,
+} = require('../controllers/articles');
 
 router.get('/', getArticle);
+
 router.post('/', celebrate({
   body: Joi.object().keys({
     keyword: Joi.string().required(),
@@ -25,6 +30,7 @@ router.post('/', celebrate({
     }),
   }),
 }), createArticle);
+
 router.delete('/:articleId', celebrate({
   params: Joi.object().keys({
     articleId: Joi.string().alphanum().length(24).required(),
